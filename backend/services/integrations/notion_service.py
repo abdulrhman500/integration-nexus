@@ -10,7 +10,7 @@
 # import requests
 # from integrations.integration_item import IntegrationItem
 
-# from redis_client import add_key_value_redis, get_value_redis, delete_key_redis
+# from redis_client import add_key_value, get_value_redis, delete_key_redis
 
 # CLIENT_ID = 'XXX'
 # CLIENT_SECRET = 'XXX'
@@ -26,7 +26,7 @@
 #         'org_id': org_id
 #     }
 #     encoded_state = json.dumps(state_data)
-#     await add_key_value_redis(f'notion_state:{org_id}:{user_id}', encoded_state, expire=600)
+#     await add_key_value(f'notion_state:{org_id}:{user_id}', encoded_state, expire=600)
 
 #     return f'{authorization_url}&state={encoded_state}'
 
@@ -63,7 +63,7 @@
 #             delete_key_redis(f'notion_state:{org_id}:{user_id}'),
 #         )
 
-#     await add_key_value_redis(f'notion_credentials:{org_id}:{user_id}', json.dumps(response.json()), expire=600)
+#     await add_key_value(f'notion_credentials:{org_id}:{user_id}', json.dumps(response.json()), expire=600)
     
 #     close_window_script = """
 #     <html>

@@ -12,7 +12,7 @@ export const NotionIntegration = ({ user, org, integrationParams, setIntegration
     const [isConnected, setIsConnected] = useState(false);
     const [isConnecting, setIsConnecting] = useState(false);
 
-    // Function to open OAuth in a new window
+    // Function to   open OAuth in a new window
     const handleConnectClick = async () => {
         try {
             setIsConnecting(true);

@@ -13,7 +13,7 @@
 # import requests
 # from integrations.integration_item import IntegrationItem
 
-# from redis_client import add_key_value_redis, get_value_redis, delete_key_redis
+# from redis_client import add_key_value, get_value_redis, delete_key_redis
 
 # # CLIENT_ID = 'XXX'
 # # CLIENT_SECRET = 'XXX'
@@ -40,8 +40,8 @@
 
 #     auth_url = f'{authorization_url}&state={encoded_state}&code_challenge={code_challenge}&code_challenge_method=S256&scope={scope}'
 #     await asyncio.gather(
-#         add_key_value_redis(f'airtable_state:{org_id}:{user_id}', json.dumps(state_data), expire=600),
-#         add_key_value_redis(f'airtable_verifier:{org_id}:{user_id}', code_verifier, expire=600),
+#         add_key_value(f'airtable_state:{org_id}:{user_id}', json.dumps(state_data), expire=600),
+#         add_key_value(f'airtable_verifier:{org_id}:{user_id}', code_verifier, expire=600),
 #     )
 
 #     return auth_url
@@ -85,7 +85,7 @@
 #             delete_key_redis(f'airtable_verifier:{org_id}:{user_id}'),
 #         )
 
-#     await add_key_value_redis(f'airtable_credentials:{org_id}:{user_id}', json.dumps(response.json()), expire=600)
+#     await add_key_value(f'airtable_credentials:{org_id}:{user_id}', json.dumps(response.json()), expire=600)
     
 #     close_window_script = """
 #     <html>
