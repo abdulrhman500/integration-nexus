@@ -1,7 +1,7 @@
 import os
-import redis.asyncio as redis
+import redis.asyncio as redis # type: ignore
 from config.logger_config import logger
-from kombu.utils.url import safequote
+from kombu.utils.url import safequote # type: ignore
 
 class RedisClient:
 
@@ -44,12 +44,4 @@ class RedisClient:
             logger.info(f"Deleted key '{key}' from Redis.")
         return result
     
-
-# async def main():
-    # ... (main function is good as is) ...
-    # redis_service = RedisClient()
-    # state_key = redis_service.KeyNamer.get_state_token_key("org_123", "user_abc")
-    # await redis_service.add_key(state_key, "a-secret-nonce", expire_seconds=60)
-    # retrieved_value = await redis_service.get_key(state_key)
-    # print(f"Retrieved value for key '{state_key}': {retrieved_value}")
-    # await redis_service.delete_key(state_key)
+redis_client = RedisClient()

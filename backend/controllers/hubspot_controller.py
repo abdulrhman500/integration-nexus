@@ -1,49 +1,51 @@
-from fastapi import APIRouter, Depends, Form, Response
-router = APIRouter()
+from typing import List
+from fastapi import APIRouter, Depends, Form, BackgroundTasks, HTTPException, status
 from dtos.hubspot_dtos import OAuthCallbackRequestDTO, HubSpotAuthorizeRequestDTO
-from fastapi.responses import RedirectResponse
+from dtos.integration_item import IntegrationItem
+from fastapi.responses import RedirectResponse, JSONResponse
 from config.logger_config import logger
-from utils.http_client import fetch
-from config.constants import HTTP_METHODS
-from services.integrations.hubspot_service import handle_oauth2callback 
+from services.integrations.hubspot_service import hubspot_service 
+
+router = APIRouter(prefix="/hubspot", tags=["HubSpot"])
 
 @router.get("/oauth2/callback")
-async def oauth2callback_hubspot(params: OAuthCallbackRequestDTO=Depends()):
-    # fetch(HTTP_METHODS.GET, "")
-    handle_oauth2callback()
-    pass
+async def oauth2callback_hubspot(
+    background_tasks: BackgroundTasks, 
+    params: OAuthCallbackRequestDTO = Depends()
+):
+    background_tasks.add_task(
+        hubspot_service.handle_oauth2callback, 
+        code=str(params.code), 
+        state=params.state
+    )
+    
+    frontend_redirect_url = "http://localhost:3000/integrations?status=hubspot_pending"
+    return RedirectResponse(url=frontend_redirect_url)
 
 
 @router.post("/oauth2/authorize")
 async def authorize_hubspot(org_id: str = Form(...), user_id: str = Form(...)):
+    authorize_body = HubSpotAuthorizeRequestDTO(org_id=org_id, user_id=user_id)
     
-    body = HubSpotAuthorizeRequestDTO.model_validate({"org_id": org_id, "user_id": user_id})
+    hubspot_auth_url = await hubspot_service.handle_authorize(
+        authorize_body.org_id, authorize_body.user_id
+    )
     
-    huspost_auth_url= handle_authorize(org_id, user_id)
+    return RedirectResponse(url=hubspot_auth_url) 
     
-    return RedirectResponse(huspost_auth_url) 
-    
-    
-            
 
-@router.get("/test")
-async def test():
-    logger.info("dddd")
-    return {"mess": "hello"}
-
-
-async def get_hubspot_credentials(user_id, org_id):
-    # TODO
-    pass
+@router.get("/credentials")
+async def get_credentials(user_id: str, org_id: str):
+    credentials = await hubspot_service.get_credentials(org_id, user_id)
+    if not credentials:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="HubSpot credentials not found. Please authenticate."
+        )
+    return {"access_token": credentials}
 
 
-async def create_integration_item_metadata_object(response_json):
-    # TODO
-    pass
-
-
-async def get_items_hubspot(credentials):
-    # TODO
-    pass
-
-
+@router.get("/items")
+async def get_items_hubspot(user_id: str, org_id: str):
+    contacts:List[IntegrationItem] = await hubspot_service.get_items(org_id, user_id)
+    return JSONResponse(content=contacts)
