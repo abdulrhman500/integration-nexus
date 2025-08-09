@@ -1,6 +1,16 @@
-# VectorShift Integrations Technical Assessment
+# Integrations Nexus
+This Task demonstrates a full-stack application with a React frontend and a Python (FastAPI) backend, featuring an OAuth 2.0 integration with the HubSpot API.
 
-This project demonstrates a full-stack application with a React frontend and a Python (FastAPI) backend, featuring an OAuth 2.0 integration with the HubSpot API.
+---
+
+## 📋 Table of Contents
+
+1.  [How to Run the Application](#-how-to-run-the-application)
+    * [Method 1: Docker (Recommended)](#method-1-run-with-docker-recommended)
+    * [Method 2: Local Setup (Manual)](#method-2-run-locally-manual-setup)
+2.  [Application Architecture](#-application-architecture)
+    * [Backend Structure](#backend-structure)
+    * [Frontend Structure](#frontend-structure)
 
 ---
 
@@ -132,5 +142,35 @@ Follow these steps if you prefer to run the services directly on your machine wi
     npm start
     ```
     The frontend will be running at `http://localhost:3000`.
+
+---
+
+## 🏛️ Application Architecture
+
+The project is organized into a separate frontend and backend, following a clean, layered architecture.
+
+### Backend Structure
+
+The backend is a FastAPI application designed for clear separation of concerns.
+
+* **`/main.py`**: The entry point of the application. It initializes the FastAPI app, sets up CORS middleware, registers exception handlers, and includes the main API router.
+
+* **`/controllers`**: This layer is responsible for handling the HTTP requests. It receives incoming requests, validates them, and calls the appropriate service layer functions. It's the bridge between the web and the application's core logic.
+
+* **`/services`**: This is where the core business logic resides. Services orchestrate the application's functionality, such as handling the OAuth 2.0 flow, interacting with the Redis cache, and communicating with external APIs like HubSpot.
+
+* **`/dtos` (Data Transfer Objects)**: These are Pydantic models that define the shape of data for API requests and responses. They provide automatic data validation and serialization.
+
+* **`/utils`**: Contains reusable utility modules.
+    * `redis_client.py`: A wrapper for the Redis client, providing a consistent interface for cache operations.
+    * `http_client.py`: A generic, reusable client for making external HTTP requests.
+
+* **`/config`**: Holds application configuration, such as constants and logger settings.
+
+### Frontend Structure
+
+The frontend is a standard React application.
+
+* **`/src/integrations`**: Contains the React components for each integration (Airtable, Notion, HubSpot). Each component is responsible for rendering the UI and triggering the authorization flow by redirecting the user to the backend.
 
 
