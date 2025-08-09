@@ -17,4 +17,24 @@ class HTTP_CONTENT_TYPE(Enum):
     FORM = "application/x-www-form-urlencoded"
     MULTIPART = "multipart/form-data"
     TEXT = "text/plain"
+
+class HUBSPOT_CONSTS():
+    API_BASE_URL = "https://api.hubapi.com"
+    
+    SCOPES = "crm.objects.contacts.read oauth"
+    
+    OPTIONAL_SCOPES=""
+    
+    # The server-to-server endpoint for exchanging a code for a token
+    TOKEN_URL="https://api.hubapi.com/oauth/v1/token"
+    
+    # The user-facing page for starting the OAuth flow
+    USER_AUTHORIZATION_REDIRECT_URL=""
+    
+    CONTACTS_API_URL = f"{API_BASE_URL}/crm/v3/objects/contacts"
+    
+    INTEGRATION_NAME= "hubspot"
+    
+    
+    
         

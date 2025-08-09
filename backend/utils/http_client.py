@@ -2,7 +2,7 @@ import httpx # type: ignore
 from typing import Optional, Dict, Any
 from config.logger_config import logger
 from config.constants import HTTP_METHODS, HTTP_CONTENT_TYPE
-
+from urllib.parse import urlencode
 
 async def fetch(
     method: HTTP_METHODS,
@@ -40,3 +40,9 @@ async def fetch(
     except httpx.RequestError as e:
         logger.error(f"Request error while requesting {url}: {e}")
         raise
+
+def build_url_with_params(url: str, params: dict) -> str:
+    if not params:
+        return url
+    query_string = urlencode(params)
+    return f"{url}?{query_string}"
