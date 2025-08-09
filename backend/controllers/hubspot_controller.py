@@ -6,19 +6,13 @@ from fastapi.responses import RedirectResponse, JSONResponse
 from config.logger_config import logger
 from services.integrations.hubspot_service import hubspot_service 
 
-router = APIRouter(prefix="/hubspot", tags=["HubSpot"])
+router = APIRouter()
 
 @router.get("/oauth2/callback")
 async def oauth2callback_hubspot(
-    background_tasks: BackgroundTasks, 
     params: OAuthCallbackRequestDTO = Depends()
 ):
-    background_tasks.add_task(
-        hubspot_service.handle_oauth2callback, 
-        code=str(params.code), 
-        state=params.state
-    )
-    
+    await hubspot_service.handle_oauth2callback(code=str(params.code), state=params.state)     
     frontend_redirect_url = "http://localhost:3000/integrations?status=hubspot_pending"
     return RedirectResponse(url=frontend_redirect_url)
 
@@ -48,4 +42,4 @@ async def get_credentials(user_id: str, org_id: str):
 @router.get("/items")
 async def get_items_hubspot(user_id: str, org_id: str):
     contacts:List[IntegrationItem] = await hubspot_service.get_items(org_id, user_id)
-    return JSONResponse(content=contacts)
+    return contacts

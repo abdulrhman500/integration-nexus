@@ -216,11 +216,11 @@ class HubspotService:
         for contact in response_json:
             properties = contact.get("properties", {})
 
-            def parse_date(date_string: str | None) -> datetime | None:  # type: ignore
+            def parse_date(date_string: str | None) -> datetime.datetime | None:
                 if not date_string:
                     return None
                 try:
-                    return datetime.fromisoformat(date_string.replace("Z", "+00:00"))  # type: ignore
+                    return datetime.datetime.fromisoformat(date_string.replace("Z", "+00:00"))
                 except (ValueError, TypeError):
                     return None
 

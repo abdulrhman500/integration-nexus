@@ -8,7 +8,6 @@ logger = logging.getLogger(__name__)
 
 async def http_exception_handler(req: Request, exc: HTTPException):
     
-    # Log the error
     logger.info(f"{exc.status_code} - {exc.detail} - Path: {req.url.path}")
 
     return JSONResponse(
@@ -35,11 +34,11 @@ async def Request_validation_error(req: Request, exc: RequestValidationError):
 async def general_exception_handler(request: Request, exc: Exception):
     logger.error(
         f"An unhandled exception occurred for request: {request.method} {request.url}",
-        exc_info=exc  # This logs the full traceback
+        exc_info=exc 
     )
     return JSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        content={"detail": "An unexpected internal server error occurred."},
+        content={"detail": "An unexpected internal server error occurred"},
     )    
     
     
