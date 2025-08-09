@@ -1,0 +1,9 @@
+@baseUrl = http://127.0.0.1:8000/hubspot
+### Test /test endpoint
+GET {{baseUrl}}/test
+Accept: application/json
+
+###
+
+GET {{baseUrl}}/authorize?user_id=123&org_id=456
+Accept: application/json
