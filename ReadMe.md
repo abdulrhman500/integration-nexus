@@ -54,7 +54,7 @@ This is the simplest way to get the entire application running. It automatically
     * From the project's **root directory**, run the following command to build and start all services:
 
     ```bash
-    docker-compose up --build --profile "*"
+    docker compose --profile "*" up --build
     ```
 
     * The backend will be available at `http://localhost:8000`.
@@ -66,12 +66,12 @@ If you only want to run a specific part of the application:
 
 * **To run only the Backend & Redis:**
     ```bash
-    docker-compose up --build --profile backend
+    docker compose --profile backend up --build
     ```
 
 * **To run only the Frontend:**
     ```bash
-    docker-compose up --build --profile frontend
+    docker compose --profile frontend up --build
     ```
 
 ---
