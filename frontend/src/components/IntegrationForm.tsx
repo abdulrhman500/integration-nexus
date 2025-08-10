@@ -36,87 +36,96 @@ const IntegrationForm: React.FC<IntegrationFormProps> = ({ onSubmit, loading }) 
   const integrations = integrationService.getAllIntegrations();
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 max-w-md mx-auto">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-        Connect Integration
-      </h2>
+    <div className="bg-gradient-to-br from-white via-slate-50 to-indigo-50 rounded-2xl shadow-2xl p-8 border border-slate-200/60 backdrop-blur-sm relative overflow-hidden">
+      {/* Decorative background elements */}
+      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-violet-400/10 to-purple-600/10 rounded-full -translate-y-16 translate-x-16"></div>
+      <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-cyan-400/10 to-blue-600/10 rounded-full translate-y-12 -translate-x-12"></div>
       
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="text-center mb-8 relative">
+        <h2 className="text-3xl font-bold bg-gradient-to-r from-slate-800 via-violet-700 to-indigo-600 bg-clip-text text-transparent mb-2">
+          Connect Integration
+        </h2>
+        <p className="text-slate-600">Choose your platform and enter your credentials</p>
+      </div>
+      
+      <form onSubmit={handleSubmit} className="space-y-6 relative">
         <div>
-          <label htmlFor="platform" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="platform" className="block text-sm font-semibold text-slate-700 mb-3">
             Integration Platform
           </label>
           <select
             id="platform"
             value={selectedPlatform}
             onChange={handlePlatformChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full pl-4 pr-4 py-3 border-2 border-slate-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-400 transition-all duration-200 bg-white/70 hover:bg-white cursor-pointer backdrop-blur-sm"
           >
             {integrations.map((integration) => (
               <option key={integration.name} value={integration.name}>
-                {integration.icon} {integration.displayName}
+                {integration.displayName}
               </option>
             ))}
           </select>
-          <p className="mt-1 text-sm text-gray-600">
-            {integrationService.getIntegrationConfig(selectedPlatform).description}
-          </p>
+          <div className="mt-3 p-3 bg-gradient-to-r from-violet-50 via-purple-50 to-indigo-50 rounded-lg border border-violet-200/50 backdrop-blur-sm">
+            <p className="text-sm text-slate-700">
+              {integrationService.getIntegrationConfig(selectedPlatform).description}
+            </p>
+          </div>
         </div>
 
-        <div>
-          <label htmlFor="org_id" className="block text-sm font-medium text-gray-700 mb-2">
-            Organization ID
-          </label>
-          <input
-            type="text"
-            id="org_id"
-            name="org_id"
-            value={formData.org_id}
-            onChange={handleInputChange}
-            placeholder="Enter your organization ID"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            required
-          />
-        </div>
+        <div className="space-y-4">
+          <div>
+            <label htmlFor="org_id" className="block text-sm font-semibold text-slate-700 mb-3">
+              Organization ID
+            </label>
+            <input
+              type="text"
+              id="org_id"
+              name="org_id"
+              value={formData.org_id}
+              onChange={handleInputChange}
+              placeholder="e.g., org_12345"
+              className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-400 transition-all duration-200 bg-white/70 hover:bg-white placeholder-slate-400 backdrop-blur-sm"
+              required
+            />
+          </div>
 
-        <div>
-          <label htmlFor="user_id" className="block text-sm font-medium text-gray-700 mb-2">
-            User ID
-          </label>
-          <input
-            type="text"
-            id="user_id"
-            name="user_id"
-            value={formData.user_id}
-            onChange={handleInputChange}
-            placeholder="Enter your user ID"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            required
-          />
+          <div>
+            <label htmlFor="user_id" className="block text-sm font-semibold text-slate-700 mb-3">
+              User ID
+            </label>
+            <input
+              type="text"
+              id="user_id"
+              name="user_id"
+              value={formData.user_id}
+              onChange={handleInputChange}
+              placeholder="e.g., user_67890"
+              className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-400 transition-all duration-200 bg-white/70 hover:bg-white placeholder-slate-400 backdrop-blur-sm"
+              required
+            />
+          </div>
         </div>
 
         <button
           type="submit"
           disabled={!isFormValid || loading}
-          className={`w-full py-3 px-4 rounded-md text-white font-medium transition-colors ${
+          className={`w-full py-4 px-6 rounded-xl text-white font-semibold text-lg transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg ${
             !isFormValid || loading
-              ? 'bg-gray-400 cursor-not-allowed'
-              : `${integrationService.getIntegrationConfig(selectedPlatform).color} hover:opacity-90`
+              ? 'bg-slate-400 cursor-not-allowed shadow-none'
+              : 'bg-gradient-to-r from-violet-500 via-purple-600 to-indigo-600 hover:from-violet-600 hover:via-purple-700 hover:to-indigo-700 shadow-violet-500/25 hover:shadow-xl hover:shadow-violet-500/40'
           }`}
         >
-          {loading ? (
-            <span className="flex items-center justify-center">
-              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              Connecting...
-            </span>
-          ) : (
-            `Connect to ${integrationService.getIntegrationConfig(selectedPlatform).displayName}`
-          )}
+          {loading ? 'Connecting...' : `Connect to ${integrationService.getIntegrationConfig(selectedPlatform).displayName}`}
         </button>
       </form>
+      
+      <div className="mt-4 flex items-center justify-center space-x-2 relative">
+        <div className={`w-2 h-2 rounded-full transition-colors ${formData.org_id ? 'bg-emerald-400 shadow-emerald-400/50 shadow-sm' : 'bg-slate-300'}`}></div>
+        <div className={`w-2 h-2 rounded-full transition-colors ${formData.user_id ? 'bg-emerald-400 shadow-emerald-400/50 shadow-sm' : 'bg-slate-300'}`}></div>
+        <span className="text-xs text-slate-500 ml-2">
+          {isFormValid ? 'Ready to connect' : 'Fill in all fields'}
+        </span>
+      </div>
     </div>
   );
 };

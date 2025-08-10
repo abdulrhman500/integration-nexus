@@ -32,13 +32,14 @@ const DataList: React.FC<DataListProps> = ({
 
   if (loading) {
     return (
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="flex items-center justify-center py-12">
-          <svg className="animate-spin h-8 w-8 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
-          <span className="ml-3 text-gray-600">Loading {config.displayName} data...</span>
+      <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+        <div className="flex flex-col items-center justify-center py-16 space-y-4">
+          <h3 className="text-lg font-semibold text-gray-900">
+            Loading {config.displayName} data
+          </h3>
+          <p className="text-gray-600">
+            Please wait while we fetch your data...
+          </p>
         </div>
       </div>
     );
@@ -46,15 +47,14 @@ const DataList: React.FC<DataListProps> = ({
 
   if (error) {
     return (
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="bg-white rounded-2xl shadow-xl p-8 border border-red-100">
         <div className="text-center py-12">
-          <div className="text-red-500 text-6xl mb-4">!</div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">Error Loading Data</h3>
-          <p className="text-gray-600 mb-4">{error}</p>
+          <h3 className="text-xl font-bold text-gray-900 mb-3">Error Loading Data</h3>
+          <p className="text-gray-600 mb-6 max-w-sm mx-auto">{error}</p>
           {onRefresh && (
             <button
               onClick={onRefresh}
-              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+              className="px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl font-semibold"
             >
               Try Again
             </button>
@@ -66,12 +66,11 @@ const DataList: React.FC<DataListProps> = ({
 
   if (items.length === 0) {
     return (
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="text-center py-12">
-          <div className="text-gray-400 text-6xl mb-4">&#128203;</div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">No Data Found</h3>
-          <p className="text-gray-600">
-            No items found in your {config.displayName} integration.
+      <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+        <div className="text-center py-16">
+          <h3 className="text-xl font-bold text-gray-900 mb-3">No Data Found</h3>
+          <p className="text-gray-600 max-w-sm mx-auto">
+            No items found in your {config.displayName} integration. Try connecting first.
           </p>
         </div>
       </div>
@@ -79,17 +78,21 @@ const DataList: React.FC<DataListProps> = ({
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md">
-      <div className="px-6 py-4 border-b border-gray-200">
+    <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+      <div className="px-8 py-6 bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-gray-900 flex items-center">
-            <span className="mr-2">{config.icon}</span>
-            {config.displayName} Data ({items.length} items)
-          </h3>
+          <div>
+            <div className="text-xl font-bold text-gray-900">
+              {config.displayName} Data
+            </div>
+            <div className="text-sm font-normal text-gray-600">
+              {items.length} {items.length === 1 ? 'item' : 'items'} found
+            </div>
+          </div>
           {onRefresh && (
             <button
               onClick={onRefresh}
-              className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors"
+              className="px-4 py-2 text-sm bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-200 border border-gray-200 shadow-sm hover:shadow-md font-medium"
             >
               Refresh
             </button>
@@ -97,51 +100,63 @@ const DataList: React.FC<DataListProps> = ({
         </div>
       </div>
       
-      <div className="divide-y divide-gray-200">
+      <div className="divide-y divide-gray-100">
         {items.map((item, index) => (
-          <div key={item.id || index} className="px-6 py-4 hover:bg-gray-50">
+          <div
+            key={item.id || index}
+            className="px-8 py-6 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 transition-all duration-200 group"
+          >
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <h4 className="text-sm font-medium text-gray-900">
-                  {item.name || `Item ${index + 1}`}
-                </h4>
+                <div className="flex items-center mb-2">
+                  <h4 className="text-lg font-semibold text-gray-900 group-hover:text-blue-700 transition-colors">
+                    {item.name || `Item ${index + 1}`}
+                  </h4>
+                  {item.directory && (
+                    <span className="ml-3 px-3 py-1 text-xs bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full font-medium">
+                      Directory
+                    </span>
+                  )}
+                </div>
+                
                 {item.type && (
-                  <p className="text-sm text-gray-600 mt-1">
-                    Type: <span className="font-medium">{item.type}</span>
-                  </p>
+                  <div className="mb-2 text-sm text-gray-600">
+                    Type: <span className="font-medium text-gray-800">{item.type}</span>
+                  </div>
                 )}
+                
                 {item.parent_path_or_name && (
-                  <p className="text-sm text-gray-600 mt-1">
-                    Parent: {item.parent_path_or_name}
-                  </p>
+                  <div className="mb-3 text-sm text-gray-600">
+                    Parent: <span className="font-medium text-gray-800">{item.parent_path_or_name}</span>
+                  </div>
                 )}
-                <div className="flex space-x-4 mt-2 text-xs text-gray-500">
+                
+                <div className="flex flex-wrap gap-4 text-xs text-gray-500">
                   {item.creation_time && (
-                    <span>Created: {formatDate(item.creation_time)}</span>
+                    <div className="bg-gray-100 px-2 py-1 rounded-md">
+                      Created: {formatDate(item.creation_time)}
+                    </div>
                   )}
                   {item.last_modified_time && (
-                    <span>Modified: {formatDate(item.last_modified_time)}</span>
+                    <div className="bg-gray-100 px-2 py-1 rounded-md">
+                      Modified: {formatDate(item.last_modified_time)}
+                    </div>
                   )}
                 </div>
               </div>
               
-              <div className="flex items-center space-x-2 ml-4">
-                {item.directory && (
-                  <span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">
-                    Directory
-                  </span>
-                )}
-                {item.url && (
+              {item.url && (
+                <div className="flex items-center ml-6">
                   <a
                     href={item.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-500 hover:text-blue-700 text-sm"
+                    className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-lg text-sm font-medium"
                   >
                     View
                   </a>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
         ))}
