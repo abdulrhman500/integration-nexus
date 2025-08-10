@@ -17,12 +17,12 @@ async def oauth2callback_hubspot(
     return RedirectResponse(url=frontend_redirect_url)
 
 
-@router.post("/oauth2/authorize")
-async def authorize_hubspot(org_id: str = Form(...), user_id: str = Form(...)):
-    authorize_body = HubSpotAuthorizeRequestDTO(org_id=org_id, user_id=user_id)
+@router.get("/oauth2/authorize")
+async def authorize_hubspot(org_id: str, user_id: str):
+    authorize_params = HubSpotAuthorizeRequestDTO(org_id=org_id, user_id=user_id)
     
     hubspot_auth_url = await hubspot_service.handle_authorize(
-        authorize_body.org_id, authorize_body.user_id
+        authorize_params.org_id, authorize_params.user_id
     )
     
     return RedirectResponse(url=hubspot_auth_url) 

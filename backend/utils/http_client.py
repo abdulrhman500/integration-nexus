@@ -26,7 +26,7 @@ async def fetch(
                 params=params,
                 **(
                     {"json": body}
-                    if content_type == HTTP_CONTENT_TYPE.JSON
+                    if content_type.value.capitalize() == HTTP_CONTENT_TYPE.JSON.value.capitalize()
                     else {"data": body}
                 ),
                 headers=headers,
