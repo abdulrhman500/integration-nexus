@@ -1,3 +1,4 @@
+import binascii
 import datetime
 import os
 import secrets
@@ -119,9 +120,17 @@ class HubspotService:
         return state_token, nonce
 
     def _decode_state_token(self, state_token: str) -> dict:
-        base64_bytes = state_token.encode("utf-8")
-        json_bytes = base64.urlsafe_b64decode(base64_bytes)
-        return json.loads(json_bytes.decode("utf-8"))
+        try:
+            base64_bytes = state_token.encode("utf-8")
+            # base64 string must be padded to a multiple of 4
+            padded_bytes = base64_bytes + b'=' * (-len(base64_bytes) % 4)
+            json_bytes = base64.urlsafe_b64decode(padded_bytes)
+            return json.loads(json_bytes.decode("utf-8"))
+        except (binascii.Error, json.JSONDecodeError, UnicodeDecodeError):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid or malformed state parameter."
+            )
 
     async def get_items(self, org_id: str, user_id: str) -> list[IntegrationItem]:
         """

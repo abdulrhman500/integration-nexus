@@ -1,4 +1,6 @@
-venv
+.venv
+
 *.pyc
 .http
 loc_report.txt
+*.pyo

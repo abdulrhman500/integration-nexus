@@ -8,7 +8,7 @@ from utils.errors.handlers import http_exception_handler, Request_validation_err
 from controllers.hubspot_controller import router as hubspot_router
 
 
-app = FastAPI()
+app = FastAPI(docs_url="/v1/docs", redoc_url="/v1/redoc", openapi_url="/v1/openapi.json")
 
 
 app.add_exception_handler(Exception, general_exception_handler)

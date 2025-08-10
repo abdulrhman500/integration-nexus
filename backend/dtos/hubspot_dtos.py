@@ -15,16 +15,11 @@ class OAuthCallbackRequestDTO(BaseModel):
         None, description="On failure: error description"
     )
 
-    @model_validator(mode="before")
-    def check_code_error(_, values):
-        code = values["code"]
-        error = values["error"]
-
-        if code and error:
-            raise ValueError("Only one of 'code' or 'error' should be set, not both")
-        if not code and not error:
-            raise ValueError("Either 'code' or 'error' must be provided")
-        return values
+    @model_validator(mode="after")
+    def check_code_and_error_exist(self):
+        if not self.code and not self.error:
+            raise ValueError("OAuth callback is missing 'code' or 'error'")
+        return self
 
 
 class HubSpotTokenResponseDTO(BaseModel):
