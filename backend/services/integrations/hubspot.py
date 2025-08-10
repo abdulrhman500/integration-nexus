@@ -106,8 +106,8 @@ class HubspotService:
         hubspot_token_response = await fetch(
             HTTP_METHODS.POST,
             HUBSPOT_CONSTS.TOKEN_URL,
-            headers={"content-type": "application/x-www-form-urlencoded"},
             body=data,
+            content_type=HTTP_CONTENT_TYPE.FORM
         )
         return HubSpotTokenResponseDTO.model_validate(hubspot_token_response)
 

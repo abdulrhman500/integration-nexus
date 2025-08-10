@@ -20,10 +20,10 @@ services:
 
   frontend:
     build:
-      context: ./frontend
+      context: .
       dockerfile: ./frontend/Dockerfile
     ports:
-      - "3000:3000"
+      - "3000:80"
     volumes:
       - ./frontend/src:/app/src
     stdin_open: true
@@ -41,6 +41,9 @@ services:
       - redis-data:/data
     networks:
       - app-network
+    profiles:
+      - backend
+  
 
 networks:
   app-network:

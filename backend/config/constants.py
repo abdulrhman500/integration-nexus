@@ -29,7 +29,7 @@ class HUBSPOT_CONSTS():
     TOKEN_URL="https://api.hubapi.com/oauth/v1/token"
     
     # The user-facing page for starting the OAuth flow
-    USER_AUTHORIZATION_REDIRECT_URL="https://app.hubspot.com/oauth/authorize"
+    USER_AUTHORIZATION_REDIRECT_URL="https://app-eu1.hubspot.com/oauth/authorize"
     
     CONTACTS_API_URL = f"{API_BASE_URL}/crm/v3/objects/contacts"
     
