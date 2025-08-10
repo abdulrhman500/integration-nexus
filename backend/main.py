@@ -5,7 +5,7 @@ from fastapi import APIRouter, FastAPI, HTTPException
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from utils.errors.handlers import http_exception_handler, Request_validation_error, general_exception_handler
-from controllers.hubspot_controller import router as hubspot_router
+from controllers.hubspot import router as hubspot_router
 
 
 app = FastAPI(docs_url="/v1/docs", redoc_url="/v1/redoc", openapi_url="/v1/openapi.json")
