@@ -1,6 +1,7 @@
+import React, { FC } from 'react';
 import { IntegrationForm } from './integration-form';
 
-function App() {
+const App: FC = () => {
   return (
     <div>
       <IntegrationForm />
