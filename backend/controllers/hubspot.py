@@ -41,5 +41,6 @@ async def get_credentials(user_id: str, org_id: str):
 
 @router.get("/items")
 async def get_items_hubspot(user_id: str, org_id: str):
+    logger.info(f"Fetching HubSpot items for user {user_id} in org {org_id}---")
     contacts:List[IntegrationItem] = await hubspot_service.get_items(org_id, user_id)
     return contacts

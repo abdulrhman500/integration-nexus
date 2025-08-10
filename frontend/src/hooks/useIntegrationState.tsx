@@ -8,7 +8,6 @@ interface IntegrationState {
   items: IntegrationItem[];
   error: string;
   currentPlatform: IntegrationPlatform;
-  credentials: { userId: string; orgId: string } | null;
 }
 
 export const useIntegrationState = () => {
@@ -18,7 +17,6 @@ export const useIntegrationState = () => {
     items: [],
     error: '',
     currentPlatform: 'hubspot',
-    credentials: null
   });
 
   const updateState = useCallback((updates: Partial<IntegrationState>) => {
@@ -33,15 +31,22 @@ export const useIntegrationState = () => {
     updateState({ error: '' });
   }, [updateState]);
 
-  const authorize = useCallback(async (platform: IntegrationPlatform, data: AuthorizeRequest) => {
-    updateState({ loading: true, error: '' });
+  // Get credentials from localStorage
+  const getCredentialsFromStorage = useCallback((platform?: IntegrationPlatform) => {
+    const targetPlatform = platform || state.currentPlatform;
+    const orgId = localStorage.getItem(`${targetPlatform}_org_id`);
+    const userId = localStorage.getItem(`${targetPlatform}_user_id`);
     
+    if (orgId && userId) {
+      return { userId, orgId };
+    }
+    return null;
+  }, [state.currentPlatform]);
+
+  const authorize = useCallback(async (platform: IntegrationPlatform, data: AuthorizeRequest) => {
+    updateState({ loading: true, error: '', currentPlatform: platform });
     try {
-      updateState({ 
-        credentials: { userId: data.user_id, orgId: data.org_id },
-        currentPlatform: platform 
-      });
-      
+      // Credentials are already stored in localStorage by the form
       await apiService.authorizeIntegration(platform, data);
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Authorization failed');
@@ -50,37 +55,59 @@ export const useIntegrationState = () => {
     }
   }, [updateState, setError]);
 
+  // Fetch data using localStorage credentials
   const fetchData = useCallback(async (platform?: IntegrationPlatform) => {
-    if (!state.credentials) return;
-    
     const targetPlatform = platform || state.currentPlatform;
-    updateState({ dataLoading: true, error: '' });
     
+    // Get credentials from localStorage
+    const credentials = getCredentialsFromStorage(targetPlatform);
+    
+    console.log('Fetching data for platform:', targetPlatform);
+    console.log('Credentials from localStorage:', credentials);
+
+    if (!credentials) {
+      console.log('No credentials found in localStorage');
+      setError('No credentials found. Please authorize first.');
+      return;
+    }
+
+    updateState({ dataLoading: true, error: '', currentPlatform: targetPlatform });
+
     try {
       const fetchedItems = await apiService.getIntegrationItems(
         targetPlatform,
-        state.credentials.userId,
-        state.credentials.orgId
+        credentials.userId,
+        credentials.orgId
       );
-      updateState({ items: fetchedItems, currentPlatform: targetPlatform });
+
+      console.log('Fetched items:', fetchedItems);
+      updateState({ items: fetchedItems });
     } catch (error) {
+      console.error('Error in fetchData:', error);
       setError(error instanceof Error ? error.message : 'Failed to fetch data');
       updateState({ items: [] });
     } finally {
       updateState({ dataLoading: false });
     }
-  }, [state.credentials, state.currentPlatform, updateState, setError]);
+  }, [state.currentPlatform, getCredentialsFromStorage, updateState, setError]);
 
-  const checkExistingCredentials = useCallback(async (userId: string, orgId: string) => {
-    updateState({ dataLoading: true, credentials: { userId, orgId } });
+  const checkExistingCredentials = useCallback(async (userId: string, orgId: string, platform?: IntegrationPlatform) => {
+    const targetPlatform = platform || 'hubspot'; // Default to hubspot if not specified
+    
+    updateState({ dataLoading: true, currentPlatform: targetPlatform });
+    
+    // Store in localStorage for persistence
+    localStorage.setItem(`${targetPlatform}_user_id`, userId);
+    localStorage.setItem(`${targetPlatform}_org_id`, orgId);
     
     try {
-      await apiService.getHubspotCredentials(userId, orgId);
-      const fetchedItems = await apiService.getHubspotContacts(userId, orgId);
+      // Use the generic API method instead of hardcoded hubspot
+      const fetchedItems = await apiService.getIntegrationItems(targetPlatform, userId, orgId);
+      console.log(`Existing credentials check for ${targetPlatform} - fetched items:`, fetchedItems);
       updateState({ items: fetchedItems });
       return true;
     } catch (error) {
-      console.log('No valid credentials found');
+      console.log(`No valid credentials found for ${targetPlatform}`);
       return false;
     } finally {
       updateState({ dataLoading: false });
@@ -94,9 +121,26 @@ export const useIntegrationState = () => {
       items: [],
       error: '',
       currentPlatform: 'hubspot',
-      credentials: null
     });
   }, []);
+
+  // Clear localStorage credentials
+  const clearCredentials = useCallback((platform?: IntegrationPlatform) => {
+    const targetPlatform = platform || state.currentPlatform;
+    localStorage.removeItem(`${targetPlatform}_org_id`);
+    localStorage.removeItem(`${targetPlatform}_user_id`);
+    updateState({ items: [], error: '' });
+  }, [state.currentPlatform, updateState]);
+
+  // Check if credentials exist in localStorage
+  const hasCredentials = useCallback((platform?: IntegrationPlatform) => {
+    return getCredentialsFromStorage(platform) !== null;
+  }, [getCredentialsFromStorage]);
+
+  // Get current credentials for display
+  const getCurrentCredentials = useCallback(() => {
+    return getCredentialsFromStorage();
+  }, [getCredentialsFromStorage]);
 
   return {
     state,
@@ -106,7 +150,10 @@ export const useIntegrationState = () => {
       checkExistingCredentials,
       setError,
       clearError,
-      resetState
+      resetState,
+      clearCredentials,
+      hasCredentials,
+      getCurrentCredentials
     }
   };
 };

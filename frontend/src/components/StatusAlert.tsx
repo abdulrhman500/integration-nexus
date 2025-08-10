@@ -31,37 +31,41 @@ const StatusAlert: React.FC<StatusAlertProps> = ({ status, onDismiss }) => {
         return {
           title: 'HubSpot Authorization Pending',
           message: 'Your HubSpot integration is being processed. Please wait...',
-          bgColor: 'bg-gradient-to-r from-blue-50 to-indigo-50',
-          borderColor: 'border-blue-200',
-          textColor: 'text-blue-900',
-          buttonColor: 'text-blue-600 hover:text-blue-800'
+          bgColor: 'linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%)',
+          borderColor: '#60a5fa',
+          textColor: '#1e3a8a',
+          buttonColor: '#3b82f6',
+          emoji: '⏳'
         };
       case 'success':
         return {
           title: 'Integration Successful',
           message: 'Your integration has been connected successfully!',
-          bgColor: 'bg-gradient-to-r from-green-50 to-emerald-50',
-          borderColor: 'border-green-200',
-          textColor: 'text-green-900',
-          buttonColor: 'text-green-600 hover:text-green-800'
+          bgColor: 'linear-gradient(135deg, #dcfce7 0%, #d1fae5 100%)',
+          borderColor: '#34d399',
+          textColor: '#065f46',
+          buttonColor: '#10b981',
+          emoji: '✅'
         };
       case 'error':
         return {
           title: 'Integration Failed',
           message: 'There was an error connecting your integration. Please try again.',
-          bgColor: 'bg-gradient-to-r from-red-50 to-pink-50',
-          borderColor: 'border-red-200',
-          textColor: 'text-red-900',
-          buttonColor: 'text-red-600 hover:text-red-800'
+          bgColor: 'linear-gradient(135deg, #fef2f2 0%, #fce7e7 100%)',
+          borderColor: '#f87171',
+          textColor: '#7f1d1d',
+          buttonColor: '#ef4444',
+          emoji: '❌'
         };
       default:
         return {
           title: 'Notification',
           message: status,
-          bgColor: 'bg-gradient-to-r from-gray-50 to-slate-50',
-          borderColor: 'border-gray-200',
-          textColor: 'text-gray-900',
-          buttonColor: 'text-gray-600 hover:text-gray-800'
+          bgColor: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
+          borderColor: '#94a3b8',
+          textColor: '#334155',
+          buttonColor: '#64748b',
+          emoji: '📢'
         };
     }
   };
@@ -69,23 +73,93 @@ const StatusAlert: React.FC<StatusAlertProps> = ({ status, onDismiss }) => {
   const config = getAlertConfig();
 
   return (
-    <div className={`rounded-2xl p-6 border-2 ${config.bgColor} ${config.borderColor} mb-8 shadow-lg backdrop-blur-sm`}>
-      <div className="flex items-start">
-        <div className="flex-1">
-          <h3 className={`text-lg font-bold ${config.textColor} mb-1`}>
+    <div style={{
+      background: config.bgColor,
+      borderRadius: '16px',
+      padding: '25px',
+      border: `2px solid ${config.borderColor}`,
+      marginBottom: '30px',
+      boxShadow: '0 10px 30px rgba(0,0,0,0.1), 0 4px 15px rgba(0,0,0,0.05)',
+      backdropFilter: 'blur(10px)',
+      position: 'relative',
+      overflow: 'hidden'
+    }}>
+      {/* Subtle background decoration */}
+      <div style={{
+        position: 'absolute',
+        top: '-20px',
+        right: '-20px',
+        width: '60px',
+        height: '60px',
+        background: `radial-gradient(circle, ${config.borderColor}20, transparent)`,
+        borderRadius: '50%'
+      }}></div>
+
+      <div style={{
+        display: 'flex',
+        alignItems: 'flex-start',
+        gap: '15px'
+      }}>
+        {/* Icon */}
+        <div style={{
+          fontSize: '24px',
+          flexShrink: 0,
+          marginTop: '2px'
+        }}>
+          {config.emoji}
+        </div>
+
+        {/* Content */}
+        <div style={{ flex: 1 }}>
+          <h3 style={{
+            fontSize: '18px',
+            fontWeight: 'bold',
+            color: config.textColor,
+            margin: '0 0 8px 0'
+          }}>
             {config.title}
           </h3>
-          <div className={`text-sm ${config.textColor} opacity-90`}>
-            <p>{config.message}</p>
+          <div style={{
+            fontSize: '14px',
+            color: config.textColor,
+            opacity: 0.9,
+            lineHeight: '1.5'
+          }}>
+            <p style={{ margin: '0' }}>{config.message}</p>
           </div>
         </div>
-        <div className="ml-auto pl-3">
+
+        {/* Dismiss Button */}
+        <div style={{ marginLeft: 'auto', paddingLeft: '15px' }}>
           <button
             type="button"
             onClick={handleDismiss}
-            className={`inline-flex rounded-xl p-2 ${config.buttonColor} hover:bg-white hover:bg-opacity-75 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-transparent focus:ring-gray-400 transition-all duration-200 transform hover:scale-110`}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: '8px',
+              padding: '8px',
+              color: config.buttonColor,
+              background: 'rgba(255,255,255,0.5)',
+              border: 'none',
+              cursor: 'pointer',
+              fontSize: '16px',
+              fontWeight: 'bold',
+              transition: 'all 0.2s ease',
+              outline: 'none'
+            }}
+            onMouseEnter={(e) => {
+              const target = e.target as HTMLButtonElement;
+              target.style.background = 'rgba(255,255,255,0.8)';
+              target.style.transform = 'scale(1.1)';
+            }}
+            onMouseLeave={(e) => {
+              const target = e.target as HTMLButtonElement;
+              target.style.background = 'rgba(255,255,255,0.5)';
+              target.style.transform = 'scale(1)';
+            }}
           >
-            <span className="sr-only">Dismiss</span>
             ✕
           </button>
         </div>

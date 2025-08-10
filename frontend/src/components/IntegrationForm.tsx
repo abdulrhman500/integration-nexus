@@ -28,6 +28,9 @@ const IntegrationForm: React.FC<IntegrationFormProps> = ({ onSubmit, loading }) 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.org_id.trim() && formData.user_id.trim()) {
+      localStorage.setItem(`${selectedPlatform}_org_id`, formData.org_id);
+      localStorage.setItem(`${selectedPlatform}_user_id`, formData.user_id);
+
       onSubmit(selectedPlatform, formData);
     }
   };
@@ -36,28 +39,92 @@ const IntegrationForm: React.FC<IntegrationFormProps> = ({ onSubmit, loading }) 
   const integrations = integrationService.getAllIntegrations();
 
   return (
-    <div className="bg-gradient-to-br from-white via-slate-50 to-indigo-50 rounded-2xl shadow-2xl p-8 border border-slate-200/60 backdrop-blur-sm relative overflow-hidden">
-      {/* Decorative background elements */}
-      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-violet-400/10 to-purple-600/10 rounded-full -translate-y-16 translate-x-16"></div>
-      <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-cyan-400/10 to-blue-600/10 rounded-full translate-y-12 -translate-x-12"></div>
+    <div style={{
+      background: 'linear-gradient(145deg, #ffffff 0%, #f8fafc 50%, #e0e7ff 100%)',
+      borderRadius: '20px',
+      padding: '35px',
+      boxShadow: '0 20px 50px rgba(0,0,0,0.1), 0 10px 30px rgba(99, 102, 241, 0.05)',
+      border: '1px solid rgba(255,255,255,0.8)',
+      position: 'relative',
+      overflow: 'hidden'
+    }}>
+      {/* Decorative elements */}
+      <div style={{
+        position: 'absolute',
+        top: '-50px',
+        right: '-50px',
+        width: '120px',
+        height: '120px',
+        background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(124, 58, 237, 0.15))',
+        borderRadius: '50%'
+      }}></div>
       
-      <div className="text-center mb-8 relative">
-        <h2 className="text-3xl font-bold bg-gradient-to-r from-slate-800 via-violet-700 to-indigo-600 bg-clip-text text-transparent mb-2">
-          Connect Integration
+      <div style={{
+        position: 'absolute',
+        bottom: '-40px',
+        left: '-40px',
+        width: '100px',
+        height: '100px',
+        background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.15))',
+        borderRadius: '50%'
+      }}></div>
+
+      <div style={{ textAlign: 'center', marginBottom: '35px', position: 'relative' }}>
+        <h2 style={{
+          fontSize: '28px',
+          fontWeight: 'bold',
+          background: 'linear-gradient(135deg, #1e293b, #7c3aed, #3730a3)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          margin: '0 0 12px 0'
+        }}>
+          🔗 Connect Integration
         </h2>
-        <p className="text-slate-600">Choose your platform and enter your credentials</p>
+        <p style={{
+          color: '#64748b',
+          fontSize: '16px',
+          margin: '0'
+        }}>
+          Choose your platform and enter your credentials
+        </p>
       </div>
-      
-      <form onSubmit={handleSubmit} className="space-y-6 relative">
-        <div>
-          <label htmlFor="platform" className="block text-sm font-semibold text-slate-700 mb-3">
-            Integration Platform
+
+      <form onSubmit={handleSubmit} style={{ position: 'relative' }}>
+        <div style={{ marginBottom: '25px' }}>
+          <label style={{
+            display: 'block',
+            fontSize: '14px',
+            fontWeight: '600',
+            color: '#374151',
+            marginBottom: '12px'
+          }}>
+            🌐 Integration Platform
           </label>
           <select
             id="platform"
             value={selectedPlatform}
             onChange={handlePlatformChange}
-            className="w-full pl-4 pr-4 py-3 border-2 border-slate-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-400 transition-all duration-200 bg-white/70 hover:bg-white cursor-pointer backdrop-blur-sm"
+            style={{
+              width: '100%',
+              padding: '15px',
+              border: '2px solid #e2e8f0',
+              borderRadius: '12px',
+              fontSize: '16px',
+              background: 'rgba(255,255,255,0.9)',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              outline: 'none'
+            }}
+            onFocus={(e) => {
+              const target = e.target as HTMLSelectElement;
+              target.style.borderColor = '#8b5cf6';
+              target.style.boxShadow = '0 0 0 3px rgba(139, 92, 246, 0.1)';
+            }}
+            onBlur={(e) => {
+              const target = e.target as HTMLSelectElement;
+              target.style.borderColor = '#e2e8f0';
+              target.style.boxShadow = 'none';
+            }}
           >
             {integrations.map((integration) => (
               <option key={integration.name} value={integration.name}>
@@ -65,17 +132,33 @@ const IntegrationForm: React.FC<IntegrationFormProps> = ({ onSubmit, loading }) 
               </option>
             ))}
           </select>
-          <div className="mt-3 p-3 bg-gradient-to-r from-violet-50 via-purple-50 to-indigo-50 rounded-lg border border-violet-200/50 backdrop-blur-sm">
-            <p className="text-sm text-slate-700">
-              {integrationService.getIntegrationConfig(selectedPlatform).description}
+          <div style={{
+            marginTop: '12px',
+            padding: '15px',
+            background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(59, 130, 246, 0.05))',
+            borderRadius: '10px',
+            border: '1px solid rgba(139, 92, 246, 0.15)'
+          }}>
+            <p style={{
+              fontSize: '14px',
+              color: '#475569',
+              margin: '0'
+            }}>
+              ℹ️ {integrationService.getIntegrationConfig(selectedPlatform).description}
             </p>
           </div>
         </div>
 
-        <div className="space-y-4">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '30px' }}>
           <div>
-            <label htmlFor="org_id" className="block text-sm font-semibold text-slate-700 mb-3">
-              Organization ID
+            <label style={{
+              display: 'block',
+              fontSize: '14px',
+              fontWeight: '600',
+              color: '#374151',
+              marginBottom: '12px'
+            }}>
+              🏢 Organization ID
             </label>
             <input
               type="text"
@@ -84,14 +167,39 @@ const IntegrationForm: React.FC<IntegrationFormProps> = ({ onSubmit, loading }) 
               value={formData.org_id}
               onChange={handleInputChange}
               placeholder="e.g., org_12345"
-              className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-400 transition-all duration-200 bg-white/70 hover:bg-white placeholder-slate-400 backdrop-blur-sm"
+              style={{
+                width: '100%',
+                padding: '15px',
+                border: '2px solid #e2e8f0',
+                borderRadius: '12px',
+                fontSize: '16px',
+                background: 'rgba(255,255,255,0.9)',
+                transition: 'all 0.2s ease',
+                outline: 'none'
+              }}
+              onFocus={(e) => {
+                const target = e.target as HTMLInputElement;
+                target.style.borderColor = '#8b5cf6';
+                target.style.boxShadow = '0 0 0 3px rgba(139, 92, 246, 0.1)';
+              }}
+              onBlur={(e) => {
+                const target = e.target as HTMLInputElement;
+                target.style.borderColor = '#e2e8f0';
+                target.style.boxShadow = 'none';
+              }}
               required
             />
           </div>
 
           <div>
-            <label htmlFor="user_id" className="block text-sm font-semibold text-slate-700 mb-3">
-              User ID
+            <label style={{
+              display: 'block',
+              fontSize: '14px',
+              fontWeight: '600',
+              color: '#374151',
+              marginBottom: '12px'
+            }}>
+              👤 User ID
             </label>
             <input
               type="text"
@@ -100,7 +208,26 @@ const IntegrationForm: React.FC<IntegrationFormProps> = ({ onSubmit, loading }) 
               value={formData.user_id}
               onChange={handleInputChange}
               placeholder="e.g., user_67890"
-              className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-400 transition-all duration-200 bg-white/70 hover:bg-white placeholder-slate-400 backdrop-blur-sm"
+              style={{
+                width: '100%',
+                padding: '15px',
+                border: '2px solid #e2e8f0',
+                borderRadius: '12px',
+                fontSize: '16px',
+                background: 'rgba(255,255,255,0.9)',
+                transition: 'all 0.2s ease',
+                outline: 'none'
+              }}
+              onFocus={(e) => {
+                const target = e.target as HTMLInputElement;
+                target.style.borderColor = '#8b5cf6';
+                target.style.boxShadow = '0 0 0 3px rgba(139, 92, 246, 0.1)';
+              }}
+              onBlur={(e) => {
+                const target = e.target as HTMLInputElement;
+                target.style.borderColor = '#e2e8f0';
+                target.style.boxShadow = 'none';
+              }}
               required
             />
           </div>
@@ -109,21 +236,72 @@ const IntegrationForm: React.FC<IntegrationFormProps> = ({ onSubmit, loading }) 
         <button
           type="submit"
           disabled={!isFormValid || loading}
-          className={`w-full py-4 px-6 rounded-xl text-white font-semibold text-lg transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg ${
-            !isFormValid || loading
-              ? 'bg-slate-400 cursor-not-allowed shadow-none'
-              : 'bg-gradient-to-r from-violet-500 via-purple-600 to-indigo-600 hover:from-violet-600 hover:via-purple-700 hover:to-indigo-700 shadow-violet-500/25 hover:shadow-xl hover:shadow-violet-500/40'
-          }`}
+          style={{
+            width: '100%',
+            padding: '18px 25px',
+            borderRadius: '12px',
+            color: 'white',
+            fontSize: '16px',
+            fontWeight: '600',
+            border: 'none',
+            cursor: (!isFormValid || loading) ? 'not-allowed' : 'pointer',
+            background: (!isFormValid || loading) 
+              ? 'linear-gradient(45deg, #94a3b8, #64748b)'
+              : 'linear-gradient(135deg, #8b5cf6, #7c3aed, #6366f1)',
+            boxShadow: (!isFormValid || loading) 
+              ? 'none'
+              : '0 8px 25px rgba(139, 92, 246, 0.3)',
+            transition: 'all 0.3s ease',
+            transform: 'scale(1)'
+          }}
+          onMouseEnter={(e) => {
+            if (!(!isFormValid || loading)) {
+              const target = e.target as HTMLButtonElement;
+              target.style.transform = 'scale(1.02)';
+              target.style.boxShadow = '0 12px 35px rgba(139, 92, 246, 0.4)';
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (!(!isFormValid || loading)) {
+              const target = e.target as HTMLButtonElement;
+              target.style.transform = 'scale(1)';
+              target.style.boxShadow = '0 8px 25px rgba(139, 92, 246, 0.3)';
+            }
+          }}
         >
-          {loading ? 'Connecting...' : `Connect to ${integrationService.getIntegrationConfig(selectedPlatform).displayName}`}
+          {loading ? '⏳ Connecting...' : `🚀 Connect to ${integrationService.getIntegrationConfig(selectedPlatform).displayName}`}
         </button>
       </form>
-      
-      <div className="mt-4 flex items-center justify-center space-x-2 relative">
-        <div className={`w-2 h-2 rounded-full transition-colors ${formData.org_id ? 'bg-emerald-400 shadow-emerald-400/50 shadow-sm' : 'bg-slate-300'}`}></div>
-        <div className={`w-2 h-2 rounded-full transition-colors ${formData.user_id ? 'bg-emerald-400 shadow-emerald-400/50 shadow-sm' : 'bg-slate-300'}`}></div>
-        <span className="text-xs text-slate-500 ml-2">
-          {isFormValid ? 'Ready to connect' : 'Fill in all fields'}
+
+      <div style={{
+        marginTop: '20px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '10px'
+      }}>
+        <div style={{
+          width: '8px',
+          height: '8px',
+          borderRadius: '50%',
+          background: formData.org_id ? '#10b981' : '#cbd5e1',
+          boxShadow: formData.org_id ? '0 2px 8px rgba(16, 185, 129, 0.3)' : 'none',
+          transition: 'all 0.3s ease'
+        }}></div>
+        <div style={{
+          width: '8px',
+          height: '8px',
+          borderRadius: '50%',
+          background: formData.user_id ? '#10b981' : '#cbd5e1',
+          boxShadow: formData.user_id ? '0 2px 8px rgba(16, 185, 129, 0.3)' : 'none',
+          transition: 'all 0.3s ease'
+        }}></div>
+        <span style={{
+          fontSize: '12px',
+          color: '#64748b',
+          marginLeft: '8px'
+        }}>
+          {isFormValid ? '✅ Ready to connect' : '📝 Fill in all fields'}
         </span>
       </div>
     </div>
