@@ -12,6 +12,10 @@ This Task demonstrates a full-stack application with a React frontend and a Pyth
     * [Backend Structure](#backend-structure)
     * [Frontend Structure](#frontend-structure)
 
+3.  [How to Run Tests](#-how-to-run-tests)
+    * [Unit Tests](#unit-tests)
+    * [Integration Tests](#integration-tests)    
+
 ---
 
 ## 🚀 How to Run the Application
@@ -174,3 +178,21 @@ The frontend is a standard React application.
 * **`/src/integrations`**: Contains the React components for each integration (Airtable, Notion, HubSpot). Each component is responsible for rendering the UI and triggering the authorization flow by redirecting the user to the backend.
 
 
+## 🧪 How to Run Tests
+
+The project includes both unit and integration tests. Ensure you are in the `/backend` directory with your virtual environment activated (`source venv/bin/activate`) before running any tests.
+
+### Unit Tests
+
+These tests use Python's built-in `unittest` library to test individual functions in the service layer in isolation.
+
+```bash
+python -m unittest backend/tests/unit/test_hubspot_service.py
+```
+
+### Integration Tests
+
+These tests use pytest to test the API endpoints. They ensure the different parts of the application (controllers, services, etc.) work together correctly.
+```bash
+pytest backend/tests/integration/test_hubspot_api.py
+```
