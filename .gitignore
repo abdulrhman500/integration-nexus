@@ -1,3 +1,25 @@
 *.pdf
+# Python cache files
+__pycache__/
+*.pyc
+
+# Environment files
 .env
+*.env
+
+# OS files
+.DS_Store
+
+# Redis dump files
+dump.rdb
+
+# VSCode or IDE files
+.vscode/
+.idea/
+
+# Ignore dev_http_client folder
+*/dev_http_client/
+*.http
+
+*/.pytest_cache/
 

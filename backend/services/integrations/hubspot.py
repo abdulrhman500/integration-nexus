@@ -7,13 +7,13 @@ import base64
 import json
 from typing import Any, Dict, List
 
-from dtos.integration_item import IntegrationItem
+from dtos.standard import IntegrationItem
 import httpx  # type: ignore
 from fastapi import Request, HTTPException, status
 
 from config.constants import HTTP_METHODS, HUBSPOT_CONSTS, HTTP_CONTENT_TYPE
-from config.logger_config import logger
-from dtos.hubspot_dtos import HubSpotTokenResponseDTO
+from config.logger import logger
+from dtos.hubspot import HubSpotTokenResponseDTO
 from utils.http_client import fetch, build_url_with_params
 from utils.redis.redis_client import redis_client
 

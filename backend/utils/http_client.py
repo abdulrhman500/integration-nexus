@@ -1,6 +1,6 @@
 import httpx # type: ignore
 from typing import Optional, Dict, Any
-from config.logger_config import logger
+from config.logger import logger
 from config.constants import HTTP_METHODS, HTTP_CONTENT_TYPE
 from urllib.parse import urlencode
 
