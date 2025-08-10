@@ -15,20 +15,19 @@ async def fetch(
 ):
     logger.info(f"Out call {method} {url}")
     try:
-        if headers == None:
-            headers = {}
-        headers = {**headers, "content-type": content_type.value}
-
+        
+        headers = {**(headers or {}), "content-type": content_type.value}
+        
+        payload = {"data": body}
+        if content_type == HTTP_CONTENT_TYPE.JSON:
+            payload = {"json": body}
+        
         async with httpx.AsyncClient(timeout=timeout) as client:
             response = await client.request(
                 method=method.value,
                 url=url,
                 params=params,
-                **(
-                    {"json": body}
-                    if content_type.value.capitalize() == HTTP_CONTENT_TYPE.JSON.value.capitalize()
-                    else {"data": body}
-                ),
+                **payload,
                 headers=headers,
             )
             response.raise_for_status()

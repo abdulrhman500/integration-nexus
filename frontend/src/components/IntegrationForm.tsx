@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { IntegrationPlatform, AuthorizeRequest } from '../types';
-import { integrationService } from '../services/IntegrationService';
+import { integrationService } from '../config/IntegrationService';
 
 interface IntegrationFormProps {
   onSubmit: (platform: IntegrationPlatform, data: AuthorizeRequest) => void;

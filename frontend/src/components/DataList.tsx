@@ -1,6 +1,6 @@
 import React from 'react';
 import { IntegrationItem, IntegrationPlatform } from '../types';
-import { integrationService } from '../services/IntegrationService';
+import { integrationService } from '../config/IntegrationService';
 
 interface DataListProps {
   items: IntegrationItem[];

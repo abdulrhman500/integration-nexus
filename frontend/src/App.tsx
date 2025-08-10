@@ -20,7 +20,7 @@ return (
       <div className="relative z-10 w-full">
         <Routes>
           <Route path="/" element={<IntegrationsPage />} />
-          <Route path="/integrations" element={<IntegrationsPage />} />
+          {/* <Route path="/integrations" element={<IntegrationsPage />} /> */}
         </Routes>
       </div>
     </div>
