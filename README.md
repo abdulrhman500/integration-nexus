@@ -175,7 +175,7 @@ The backend is a FastAPI application designed for clear separation of concerns.
 
 The frontend is a standard React application.
 
-* **`/src/integrations`**: Contains the React components for each integration (Airtable, Notion, HubSpot). Each component is responsible for rendering the UI and triggering the authorization flow by redirecting the user to the backend.
+* **`/src/integrations`**: Contains the React components for each integration (Airtable, Notion, HubSpot). Each component is responsible for rendering the UI and triggering the authorization flow by redirecting the user to the 
 
 
 ## 🧪 How to Run Tests
@@ -187,12 +187,12 @@ The project includes both unit and integration tests. Ensure you are in the `/ba
 These tests use Python's built-in `unittest` library to test individual functions in the service layer in isolation.
 
 ```bash
-python -m unittest backend/tests/unit/test_hubspot_service.py
+python -m unittest backend/tests/unit/test_hubspot.py
 ```
 
 ### Integration Tests
 
 These tests use pytest to test the API endpoints. They ensure the different parts of the application (controllers, services, etc.) work together correctly.
 ```bash
-pytest backend/tests/integration/test_hubspot_api.py
+pytest backend/tests/integration/test_hubspot.py
 ```

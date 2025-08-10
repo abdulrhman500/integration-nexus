@@ -2,7 +2,7 @@ from fastapi import Request, HTTPException, status
 from fastapi import status
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
-from config.logger_config import logger
+from config.logger import logger
 
 async def http_exception_handler(req: Request, exc: HTTPException):
     

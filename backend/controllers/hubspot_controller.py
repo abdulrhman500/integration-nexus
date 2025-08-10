@@ -1,10 +1,10 @@
 from typing import List
 from fastapi import APIRouter, Depends, Form, BackgroundTasks, HTTPException, status
-from dtos.hubspot_dtos import OAuthCallbackRequestDTO, HubSpotAuthorizeRequestDTO
-from dtos.integration_item import IntegrationItem
-from fastapi.responses import RedirectResponse, JSONResponse
-from config.logger_config import logger
-from services.integrations.hubspot_service import hubspot_service 
+from dtos.hubspot import OAuthCallbackRequestDTO, HubSpotAuthorizeRequestDTO
+from dtos.standard import IntegrationItem
+from fastapi.responses import RedirectResponse
+from config.logger import logger
+from services.integrations.hubspot import hubspot_service 
 
 router = APIRouter()
 

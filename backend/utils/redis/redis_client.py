@@ -1,6 +1,6 @@
 import os
 import redis.asyncio as redis # type: ignore
-from config.logger_config import logger
+from config.logger import logger
 from kombu.utils.url import safequote # type: ignore
 
 class RedisClient:
