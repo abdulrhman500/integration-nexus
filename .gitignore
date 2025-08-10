@@ -18,5 +18,8 @@ dump.rdb
 .idea/
 
 # Ignore dev_http_client folder
-backend/dev_http_client/
+*/dev_http_client/
+*.http
+
+*/.pytest_cache/
 
