@@ -1,3 +1,22 @@
 *.pdf
+# Python cache files
+__pycache__/
+*.pyc
+
+# Environment files
 .env
+*.env
+
+# OS files
+.DS_Store
+
+# Redis dump files
+dump.rdb
+
+# VSCode or IDE files
+.vscode/
+.idea/
+
+# Ignore dev_http_client folder
+backend/dev_http_client/
 
